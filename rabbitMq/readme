@@ -1,0 +1,16 @@
+总结：
+一、自定义队列
+1、消息发送到指定队列，不需要指定exchange;
+2、在使用channel.basicConsume接收消息时使autoAck为false，即不自动会发ack，由channel.basicAck()在消息处理完成后发送消息；
+3、可以一个或多个客户端接收，接收端一个消息没有处理完时不会接收另一个消息，即接收端发送了ack后才会接收下一个消息;
+二、发布、订阅模式，发送端发送广播消息，多个接收端接收。
+1、fanout：消息广播的模式，
+(1)不管路由键或者是路由模式，会把消息发给绑定给它的全部队列，如果配置了routing_key会被忽略;
+(2)只需要设置exchangeName (queue、routing_key都不需要设置);
+(3)接收端需要定义一个queue来接收(自定义或自动生成获取)
+2、direct：按路线发送接收
+与fanout的区别是：exchange的type为direct,在绑定queue和exchange的时候使用了routing key，即从该exchange上只接收routing key指定的消息。
+3、topic
+与direct的区别是：exchange的type为topic,发送消息的routing key不是固定的单词，而是匹配字符串，如"*.lu.#"，*匹配一个单词，#匹配0个或多个单词。
+
+ps：任何模式下，接收者如果收到消息没有发送确认收到的话，消息的队列中都不会删除，如果同一时间只接收一个消息，则一个消息没有处理完时不会接收另一个消息；

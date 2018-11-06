@@ -1,0 +1,42 @@
+buildscript {
+    ext.spring_boot_version = '1.5.10.RELEASE'
+    repositories {
+        maven { url 'https://repo.spring.io/release/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+
+
+configurations.all {
+    // check for updates every build 缓存刷新
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'http://127.0.0.1:8081/repository/maven-public/'}
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+
+    compile 'com.rabbitmq:amqp-client:5.5.0'
+
+    //json
+    compile 'com.alibaba:fastjson:1.2.34'
+
+
+
+
+}
