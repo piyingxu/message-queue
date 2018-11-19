@@ -1,0 +1,77 @@
+buildscript {
+    ext.spring_boot_version = '1.5.10.RELEASE'
+    repositories {
+        maven { url 'https://repo.spring.io/release/' }
+        maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'http://127.0.0.1:8081/repository/maven-public/'}
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version"
+    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+
+
+configurations.all {
+    // check for updates every build 缓存刷新
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+configurations {
+    //排除依赖--使用undertow
+    //compile.exclude module: "spring-boot-starter-tomcat"
+    compile.exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+}
+
+repositories {
+    maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+    maven { url 'http://127.0.0.1:8081/repository/maven-public/'}
+    mavenCentral()
+    jcenter()
+}
+
+jar {
+    baseName = 'kafka'
+    version = '1.0'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Edgware.SR3' // 切记，如果配成Dalston.RELEASE，则/health 则{"status"："down"}
+    }
+}
+
+dependencies {
+
+    //json
+    compile 'com.alibaba:fastjson:1.2.34'
+
+    //web访问
+    compile 'org.springframework.boot:spring-boot-starter-web'
+
+   
+    //测试maven私服中心nexus
+    compile 'com.pyx:springCloudUtil:2.0-SNAPSHOT'
+    
+     /*
+    //zookeeper依赖
+    compile 'org.apache.zookeeper:zookeeper:3.4.10'
+    
+    //zookeeper客户端
+    compile 'org.apache.curator:curator-framework:2.7.1'
+    compile 'org.apache.curator:curator-client:2.7.1'
+    compile 'org.apache.curator:curator-recipes:2.7.1'
+
+    compile 'org.apache.kafka:kafka-streams:1.1.0'
+    compile 'org.apache.kafka:kafka-clients:0.10.1.1'
+    */
+    compile 'org.springframework.kafka:spring-kafka:1.1.8.RELEASE'
+
+
+}

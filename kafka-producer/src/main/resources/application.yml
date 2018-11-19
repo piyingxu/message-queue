@@ -1,0 +1,13 @@
+server:
+  port: 7000
+spring:
+  application:
+    name: kafka
+    author: pyx
+    description: kafka入门
+
+kafka.producer.servers: 127.0.0.1:9093
+kafka.producer.retries: 0
+kafka.producer.batch.size: 4096
+kafka.producer.linger: 1
+kafka.producer.buffer.memory: 40960
